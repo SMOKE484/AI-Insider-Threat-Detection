@@ -22,6 +22,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+print("CORS allowed origins:", [o for o in allowed_origins if o])
+
 # ── Load model and features once at startup ───────────────────────────────────
 with open("models/rf_model.pkl", "rb") as f:
     model = pickle.load(f)
