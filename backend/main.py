@@ -22,7 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ── Load model and features once at startup ───────────────────────────────────
+#Load model and features
 with open("models/rf_model.pkl", "rb") as f:
     model = pickle.load(f)
 
@@ -55,7 +55,7 @@ FEATURE_META = {
     "employee_seniority_years":    {"label": "Years of Service",           "description": "Tenure cross-referenced with behavioural deviation."},
 }
 
-# ── Request model ─────────────────────────────────────────────────────────────
+#Request model
 class EmployeeData(BaseModel):
     employee_department: int = 0
     employee_campus: int = 0
@@ -75,7 +75,7 @@ class EmployeeData(BaseModel):
     num_unique_campus: int = 1
     entry_during_weekend: int = 0
 
-# ── Routes ────────────────────────────────────────────────────────────────────
+#Routes
 @app.get("/")
 def root():
     return {"status": "ThreatSense AI API is running"}
