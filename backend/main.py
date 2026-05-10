@@ -6,13 +6,18 @@ import pickle
 import pandas as pd
 import io
 import numpy as np
+import os
 
 app = FastAPI(title="ThreatSense AI API")
 
-# ── CORS — allows React (port 3000) to call FastAPI (port 8000) ──────────────
+allowed_origins = [
+    "http://localhost:3000",
+    os.getenv("FRONTEND_URL", ""),
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[o for o in allowed_origins if o],
     allow_methods=["*"],
     allow_headers=["*"],
 )

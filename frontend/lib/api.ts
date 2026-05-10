@@ -1,7 +1,7 @@
 import axios from "axios";
 import { EmployeeData, PredictionResult } from "@/types";
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 export async function predict(data: EmployeeData): Promise<PredictionResult> {
   const response = await axios.post(`${API_BASE}/predict`, data);
