@@ -1,6 +1,21 @@
 venv/
 __pycache__/
 *.pyc
+*.pyo
 .ipynb_checkpoints/
 data/
-models/*.pkl
+
+# env / secrets
+.env
+.env.*
+*.env
+
+# logs
+*.log
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# macOS
+.DS_Store
