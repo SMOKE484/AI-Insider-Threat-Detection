@@ -64,7 +64,7 @@ FEATURE_META = {
     "employee_seniority_years":    {"label": "Years of Service",           "description": "Tenure cross-referenced with behavioural deviation."},
 }
 
-# ── Request model ─────────────────────────────────────────────────────────────
+#Request model
 class EmployeeData(BaseModel):
     employee_department: int = 0
     employee_campus: int = 0
@@ -84,7 +84,7 @@ class EmployeeData(BaseModel):
     num_unique_campus: int = 1
     entry_during_weekend: int = 0
 
-# ── Routes ────────────────────────────────────────────────────────────────────
+#Routes
 @app.get("/")
 def root():
     return {"status": "ThreatSense AI API is running"}
