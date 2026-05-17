@@ -98,6 +98,3 @@ The app will be available at `http://localhost:3000`.
 
 ---
 
-## 👨‍💻 Authors
-
-Mr S.M. Makura · COS720 · University of Pretoria · 2026
