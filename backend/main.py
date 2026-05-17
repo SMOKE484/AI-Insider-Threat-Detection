@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from fastapi import UploadFile, File
 import pickle
@@ -31,10 +32,16 @@ with open("models/rf_model.pkl", "rb") as f:
 with open("models/feature_names.pkl", "rb") as f:
     features = pickle.load(f)
 
+try:
+    with open("models/label_encoders.pkl", "rb") as f:
+        label_encoders = pickle.load(f)
+except FileNotFoundError:
+    label_encoders = {}
+
 BASELINES = {
     "employee_department": 5, "employee_campus": 1, "employee_position": 24,
-    "employee_seniority_years": 12, "is_contractor": 0, "employee_classification": 2,
-    "has_foreign_citizenship": 0, "has_criminal_record": 0, "total_printed_pages": 13,
+    "employee_seniority_years": 12, "is_contractor": 0.1, "employee_classification": 2,
+    "has_foreign_citizenship": 0.1, "has_criminal_record": 0.1, "total_printed_pages": 13,
     "num_printed_pages_off_hours": 0, "total_files_burned": 9, "burned_from_other": 0,
     "is_abroad": 0, "hostility_country_level": 0, "num_entries": 1,
     "num_unique_campus": 1, "entry_during_weekend": 0,
@@ -144,10 +151,21 @@ async def predict_csv(file: UploadFile = File(...)):
                               "is_malicious"] if c in df.columns]
     df = df.drop(columns=drop_cols)
 
-    # Encode text columns
-    from sklearn.preprocessing import LabelEncoder
+    # Encode text columns using saved encoders from training
     for col in df.select_dtypes(include="object").columns:
-        df[col] = LabelEncoder().fit_transform(df[col].astype(str))
+        if col in label_encoders:
+            try:
+                df[col] = label_encoders[col].transform(df[col].astype(str))
+            except ValueError as e:
+                return JSONResponse(
+                    status_code=400,
+                    content={"error": f"Column '{col}' contains unknown categories: {str(e)}"}
+                )
+        else:
+            return JSONResponse(
+                status_code=400,
+                content={"error": f"Unexpected non-numeric column '{col}'. Upload a pre-encoded CSV or ensure column names match the training data."}
+            )
 
     # Fill missing features with 0
     for f in features:
