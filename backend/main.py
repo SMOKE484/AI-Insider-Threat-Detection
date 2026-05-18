@@ -25,7 +25,7 @@ app.add_middleware(
 
 print("CORS allowed origins:", [o for o in allowed_origins if o])
 
-# ── Load model and features once at startup ───────────────────────────────────
+#  Load model and features once at startup 
 with open("models/rf_model.pkl", "rb") as f:
     model = pickle.load(f)
 
@@ -154,17 +154,14 @@ async def predict_csv(file: UploadFile = File(...)):
     # Encode text columns using saved encoders from training
     for col in df.select_dtypes(include="object").columns:
         if col in label_encoders:
-            try:
-                df[col] = label_encoders[col].transform(df[col].astype(str))
-            except ValueError as e:
-                return JSONResponse(
-                    status_code=400,
-                    content={"error": f"Column '{col}' contains unknown categories: {str(e)}"}
-                )
+            le = label_encoders[col]
+            df[col] = df[col].astype(str).map(
+                lambda x: int(le.transform([x])[0]) if x in le.classes_ else 0
+            )
         else:
             return JSONResponse(
                 status_code=400,
-                content={"error": f"Unexpected non-numeric column '{col}'. Upload a pre-encoded CSV or ensure column names match the training data."}
+                content={"error": f"Unexpected column '{col}'. Ensure column names match the training data."}
             )
 
     # Fill missing features with 0
