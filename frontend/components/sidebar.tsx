@@ -159,8 +159,8 @@ export default function Sidebar({
           textAlign:   "center",
           lineHeight:  1.6,
         }}>
-          COS720 · 2026<br />
-          Mr S.M. Makura · UP
+        <br />
+          
         </div>
       </div>
     </div>
