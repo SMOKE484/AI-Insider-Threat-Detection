@@ -1,0 +1,16 @@
+scenario,actual,predicted,confidence
+True Positive,1,1,0.994
+True Positive,1,1,0.993
+True Positive,1,1,0.993
+True Positive,1,1,0.992
+True Positive,1,1,0.992
+False Positive,0,1,0.989
+False Positive,0,1,0.984
+False Positive,0,1,0.982
+False Positive,0,1,0.981
+False Positive,0,1,0.978
+False Negative,1,0,0.498
+False Negative,1,0,0.498
+False Negative,1,0,0.498
+False Negative,1,0,0.498
+False Negative,1,0,0.496
