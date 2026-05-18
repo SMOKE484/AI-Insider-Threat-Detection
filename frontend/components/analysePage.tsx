@@ -5,7 +5,7 @@ import { predict, predictCSV } from "@/lib/api";
 import { EmployeeData, PredictionResult } from "@/types";
 import RiskGauge from "@/components/riskGauge";
 
-// ── Sample data ───────────────────────────────────────────────────────────────
+//Sample data
 const SAMPLE_PROFILES: Record<string, EmployeeData> = {
   "Normal Employee — John Smith": {
     employee_department:2,employee_campus:1,employee_position:10,
