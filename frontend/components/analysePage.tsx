@@ -62,8 +62,6 @@ const DEFAULT_DATA: EmployeeData = {
   entry_during_weekend:0,
 };
 
-// ── Responsive hook ───────────────────────────────────────────────────────────
-// Collapses the two-column layout to a single column below `bp` px.
 function useIsMobile(bp = 960) {
   const [m, setM] = useState(false);
   useEffect(() => {
@@ -76,7 +74,7 @@ function useIsMobile(bp = 960) {
   return m;
 }
 
-// ── Shared UI ─────────────────────────────────────────────────────────────────
+
 function Card({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
     <div style={{
@@ -134,7 +132,7 @@ function ModeTab({ id, icon, label, active, onClick }: {
   );
 }
 
-// ── Animated counter hook ─────────────────────────────────────────────────────
+
 function useCounter(target: number, duration = 1000, enabled = true) {
   const [value, setValue] = useState(0);
   const frameRef          = useRef<number>(0);
@@ -146,7 +144,6 @@ function useCounter(target: number, duration = 1000, enabled = true) {
     const tick = (now: number) => {
       if (!start) start = now;
       const t   = Math.min((now - start) / duration, 1);
-      // ease-out cubic
       const eased = 1 - Math.pow(1 - t, 3);
       setValue(parseFloat((eased * target).toFixed(1)));
       if (t < 1) frameRef.current = requestAnimationFrame(tick);
@@ -159,7 +156,7 @@ function useCounter(target: number, duration = 1000, enabled = true) {
   return value;
 }
 
-// ── Animated bar component ────────────────────────────────────────────────────
+//Animated bar component
 function AnimatedBar({
   targetPct, color, delay, trigger,
 }: {
@@ -189,7 +186,7 @@ function AnimatedBar({
   );
 }
 
-// ── Stat card with animated number ───────────────────────────────────────────
+//Stat card with animated number 
 function AnimatedStatCard({
   icon, label, value, suffix, sub, color, iconBg, animate,
 }: {
@@ -222,9 +219,7 @@ function AnimatedStatCard({
   );
 }
 
-// ── Curated Profile Preview ──────────────────────────────────────────────────
-// Replaces the 17-chip flat dump. Surfaces the fields a human can actually
-// reason about at a glance; the rest live behind a disclosure.
+//Curated Profile Preview 
 const KEY_FIELDS: Array<{ key: keyof EmployeeData; label: string; fmt?: (v: number) => string }> = [
   { key: "employee_classification",     label: "Clearance",       fmt: v => `Level ${v}` },
   { key: "employee_seniority_years",    label: "Tenure",          fmt: v => `${v} yr${v === 1 ? "" : "s"}` },
@@ -288,7 +283,7 @@ function ProfilePreview({ data }: { data: EmployeeData }) {
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
+//Main component
 export default function AnalysePage() {
   const isMobile                      = useIsMobile(960);
   const [mode, setMode]             = useState<"sample"|"manual"|"csv">("sample");
@@ -374,9 +369,7 @@ export default function AnalysePage() {
         }
       `}</style>
 
-      {/* ══════════════════════════════════════════
-          LEFT — Input panel (unchanged)
-      ══════════════════════════════════════════ */}
+      {/* LEFT — Input panel (unchanged) */}
       <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
         <Card>
           <CardHeader icon="fa-user-shield" title="Employee Profile" />
@@ -417,7 +410,7 @@ export default function AnalysePage() {
                     </button>
                   );
                 })}
-                {/* Curated Preview — 6 signal-carrying fields, with the rest tucked behind a toggle */}
+                {/* Curated Preview */}
                 <ProfilePreview data={SAMPLE_PROFILES[selectedProfile]} />
               </div>
             )}
@@ -570,9 +563,7 @@ export default function AnalysePage() {
         )}
       </div>
 
-      {/* ══════════════════════════════════════════
-          RIGHT — Results panel
-      ══════════════════════════════════════════ */}
+      {/* RIGHT — Results panel */}
       <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
 
         {/* Empty state */}
@@ -598,15 +589,10 @@ export default function AnalysePage() {
           </Card>
         )}
 
-        {/* ── Results (shown once result exists OR while loading) ── */}
+        {/* Results  */}
         {(result || loading) && (
           <>
-            {/* ── Verdict Hero ──
-                 Unified card replacing the old banner + gauge split.
-                 Before: two cards restated the same verdict (banner headline +
-                 confidence% + risk level, then a separate gauge with the same
-                 risk level badge). Now: one card, one message, one place to
-                 look for "what did the model decide". */}
+            {/* Verdict Hero */}
             <Card style={{ borderLeft: `4px solid ${result ? rc : "#d1d5db"}` }}>
               <div style={{
                 padding: "20px 22px",
@@ -662,7 +648,7 @@ export default function AnalysePage() {
                   </div>
                 </div>
 
-                {/* Right — gauge (already shows the threat score + risk-level badge) */}
+                {/* Risk Gauge */}
                 <div>
                   <RiskGauge
                     threatScore={result?.threat_prob ?? 0}
@@ -673,7 +659,7 @@ export default function AnalysePage() {
               </div>
             </Card>
 
-            {/* ── Animated KPI stat cards ── */}
+            {/*Animated KPI stat cards*/}
             {result && (
               <div style={{ display:"grid", gridTemplateColumns:"repeat(3,minmax(0,1fr))", gap:12 }}>
                 <AnimatedStatCard
@@ -696,7 +682,7 @@ export default function AnalysePage() {
               </div>
             )}
 
-            {/* ── Anomaly indicators with animated bars ── */}
+            {/*Anomaly indicators with animated bars*/}
             {result && (
               <Card>
                 <CardHeader
@@ -784,7 +770,7 @@ export default function AnalysePage() {
               </Card>
             )}
 
-            {/* ── Executive summary — fades in last ── */}
+            {/*Executive summary */}
             {result && (
               <Card style={{
                 opacity:    summaryReady ? 1 : 0,
